@@ -36,11 +36,22 @@ async function getMoreConnections(page,browser){
     timeout: 0
   })
   await page.waitForTimeout(2000);
-  await page.waitForSelector("#ember59");
-  await page.click("#ember59")
-  
+  // close messages
+  await page.waitForSelector("#ember60");
+  await page.click("#ember60")
+  // open all suggested connections
   await page.waitForSelector('button[aria-label="See all People you may know with similar roles"]');
   await page.click('button[aria-label="See all People you may know with similar roles"]')
+  // get all suggested connection
+  await page.waitForTimeout(3000);
+  const buttonSpans = await page.$$('button > span')
+  buttonSpans.forEach( async (span) => {
+    await page.waitForSelector('button > span')
+    let element = await page.$(span)
+    let value = await element.evaluate(el => el.textCurrent, element)
+    console.log(JSON.stringify(value));
+  });
+
   console.log('done');
 }
 
